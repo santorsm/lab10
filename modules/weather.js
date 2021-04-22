@@ -8,7 +8,7 @@ function getWeather(latitude, longitude) {
   const key = 'weather-' + latitude + longitude;
   const url = 'http://api.weatherbit.io/v2.0/forecast/daily';
   const queryParams = {
-    key: WEATHER_API_KEY,
+    key: process.env.WEATHER_API_KEY,
     lang: 'en',
     lat: lat,
     lon: lon,

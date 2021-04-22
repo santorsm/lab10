@@ -1,11 +1,18 @@
 'use strict';
 
-require('dotenv');
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
 const weather = require('./modules/weather.js');
 const app = express();
+
+app.use(cors());
+const PORT = process.env.PORT || 3002;
+
+app.get('/', (request, response) => {
+  response.status(200).send('Hello, this is Lab 10');
+});
 
 app.get('/weather', weatherHandler);
 

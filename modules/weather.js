@@ -4,12 +4,16 @@ let cache = require('./cache.js');
 
 module.exports = getWeather;
 
-function getWeather(latitude, longitude) {
-  const key = 'weather-' + latitude + longitude;
+//add superagent
+const superagent = require('superagent');
+
+function getWeather(lat, lon) {
+  const key = 'weather-' + lat + lon;
   const url = 'http://api.weatherbit.io/v2.0/forecast/daily';
   const queryParams = {
     key: process.env.WEATHER_API_KEY,
     lang: 'en',
+    //change to match key format
     lat: lat,
     lon: lon,
     days: 5,
@@ -21,7 +25,8 @@ function getWeather(latitude, longitude) {
     console.log('Cache miss');
     cache[key] = {};
     cache[key].timestamp = Date.now();
-    cache[key].data = superagent.get(url)
+    //add query parameters for weather
+    cache[key].data = superagent.get(url).query(queryParams)
     .then(response => parseWeather(response.body));
   }
   
@@ -41,7 +46,9 @@ function parseWeather(weatherData) {
 
 class Weather {
   constructor(day) {
-    this.forecast = day.weather.description;
-    this.time = day.datetime;
+    this.description = day.weather.description;
+    this.date = day.datetime;
+    this.high = day.high_temp;
+    this.low = day.low_temp;
   }
 }
